@@ -12,10 +12,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Webgriffe\SyliusTableRateShippingPlugin\Entity\ShippingTableRate;
+use Webgriffe\SyliusTableRateShippingPlugin\Form\Transformer\ShippingTableRateTransformer;
 
 final class TableRateConfigurationType extends AbstractType
 {
     public const TABLE_RATE_FIELD_NAME = 'table_rate';
+
+    public function __construct(
+        private ShippingTableRateTransformer $shippingTableRateTransformer,
+    )
+    {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -26,7 +33,7 @@ final class TableRateConfigurationType extends AbstractType
             EntityType::class,
             [
                 'label' => $messagesNamespace . 'table_rate.label',
-                'placeholder' => '' . $messagesNamespace . 'table_rate.placeholder',
+                'placeholder' => $messagesNamespace . 'table_rate.placeholder',
                 'class' => ShippingTableRate::class,
                 'query_builder' => function (EntityRepository $entityRepository) use ($currency): QueryBuilder {
                     return $entityRepository
@@ -40,6 +47,9 @@ final class TableRateConfigurationType extends AbstractType
                 'constraints' => [new NotBlank(['groups' => ['sylius']])],
             ]
         );
+
+        $builder->get(self::TABLE_RATE_FIELD_NAME)
+            ->addModelTransformer($this->shippingTableRateTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

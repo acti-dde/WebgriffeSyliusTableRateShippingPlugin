@@ -54,9 +54,8 @@ final class TableRateResolver implements TableRateResolverInterface
             );
         }
 
-        /** @var ShippingTableRate $tableRate */
-        $tableRate = $calculatorConfig[$channelCode][TableRateConfigurationType::TABLE_RATE_FIELD_NAME];
-        $tableRate = $this->tableRateRepository->findOneBy(['code' => $tableRate->getCode()]);
+        $tableRateCode = $calculatorConfig[$channelCode][TableRateConfigurationType::TABLE_RATE_FIELD_NAME];
+        $tableRate = $this->tableRateRepository->findOneBy(['code' => $tableRateCode]);
         Assert::isInstanceOf($tableRate, ShippingTableRate::class);
 
         return $tableRate;

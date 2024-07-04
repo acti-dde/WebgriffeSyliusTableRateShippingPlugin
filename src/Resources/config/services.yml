@@ -36,6 +36,8 @@ services:
             - { name: form.type }
 
     Webgriffe\SyliusTableRateShippingPlugin\Form\Type\Shipping\Calculator\TableRateConfigurationType:
+        arguments:
+            - '@Webgriffe\SyliusTableRateShippingPlugin\Form\Transformer\ShippingTableRateTransformer'
         tags:
             - { name: form.type }
 
@@ -47,5 +49,9 @@ services:
 
     Webgriffe\SyliusTableRateShippingPlugin\Resolver\TableRateResolverInterface:
         class: Webgriffe\SyliusTableRateShippingPlugin\Resolver\TableRateResolver
+        arguments:
+            - '@webgriffe.repository.shipping_table_rate'
+
+    Webgriffe\SyliusTableRateShippingPlugin\Form\Transformer\ShippingTableRateTransformer:
         arguments:
             - '@webgriffe.repository.shipping_table_rate'
